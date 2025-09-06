@@ -15,6 +15,8 @@
     <div class="navbar">
         <div class="navbar-left">
             <a href="/" class="navbar-logo"> Plataforma de Adopción </a>
+            <a href="listado.html" class="navbar-logo">Listado</a>
+            <a href="estadisticas.html" class="navbar-logo">Estadísticas</a>
         </div>
         
         <div class="navbar-right">
@@ -28,8 +30,27 @@
     <main>
         <div class="main-cols">
             <div class="publication-form">
-                <form class="form-divider">
+                
+                <div id="success-box" class="success-box" hidden>
+                    <h2 id="success-msg"></h2>
+                    <ul id="success-list" class="success-list"></ul>
+                </div>
+
+                <div id="confirm-box" class="confirm-box" hidden>
+                    <h2 id="confirm-msg"></h2>
+                    <ul id="confirm-list" class="confirm-list"></ul>
+                </div>
+                
+                <form name="formulario" class="form-divider" method="post" enctype="multipart/form-data">
                     <div class="form-left">
+                        
+                        <div id="val-box" hidden>
+                            <h2 id="val-msg"></h2>
+                            <ul id="val-list"></ul>
+                        </div>
+
+                        <h2>Donde?</h2>
+                        
                         <label for="region">Región:</label>
                         <select id="region" name="region">
                             <option>Elige una región</option>
@@ -43,6 +64,8 @@
                         <label for="sector">Sector:</label>
                         <input type="text" id="sector" name="sector">
 
+                        <h2>Tus datos</h2>
+
                         <label for="nombre">Nombre:</label>
                         <input type="text" id="nombre" name="nombre">
 
@@ -51,10 +74,56 @@
 
                         <label for="telefono">Teléfono:</label>
                         <input type="tel" id="telefono" name="telefono">
+
+                        <h3>Redes Sociales</h3>
+
+                        <div class="checkbox-redes">
+                            <div class="inline-element">
+                                <input type="checkbox" id="whatsapp" name="whatsapp" value="whatsapp">
+                                <label for="whatsapp"> Whatsapp</label>
+                            </div>
+
+                            <div class="inline-element">
+                                <input type="checkbox" id="telegram" name="telegram" value="telegram">
+                                <label for="telegram"> Telegram</label>
+                            </div>
+
+                            <div class="inline-element">
+                                <input type="checkbox" id="twitter" name="twitter" value="twitter">
+                                <label for="twitter"> X</label>
+                            </div>
+
+                            <div class="inline-element">
+                                <input type="checkbox" id="instagram" name="instagram" value="instagram">
+                                <label for="instagram"> Instagram</label>
+                            </div>
+
+                            <div class="inline-element">
+                                <input type="checkbox" id="tiktok" name="tiktok" value="tiktok">
+                                <label for="tiktok"> Tiktok</label>
+                            </div>
+
+                            <div class="inline-element">
+                                <input type="checkbox" id="otra" name="otra" value="otra">
+                                <label for="otra"> Otra</label>
+                            </div>
+                        </div>
+
+                        <div class="input-redes">
+                            <input type="text" id="whatsapp-input" name="whatsapp-input" placeholder="Whatsapp">
+                            <input type="text" id="telegram-input" name="telegram-input" placeholder="Telegram"> 
+                            <input type="text" id="twitter-input" name="twitter-input" placeholder="X"> 
+                            <input type="text" id="instagram-input" name="instagram-input" placeholder="Instagram"> 
+                            <input type="text" id="tiktok-input" name="tiktok-input" placeholder="Tiktok"> 
+                            <input type="text" id="other-input" name="other-input" placeholder="Otra"> 
+                        </div>
+                        
                     </div>
 
                     <div class="form-right">
-                        <label for="Tipo">Tipo:</label>
+                        <h2>Datos de la mascota</h2>
+                        
+                        <label for="tipo">Tipo:</label>
                         <select id="tipo" name="tipo">
                             <option>Elige un tipo</option>
                             <option>Perro</option>
@@ -79,16 +148,14 @@
 
 
                         <label for="descripcion">Descripción:</label>
-                        <textarea name="descripcion" rows="10" cols="50">Ingresa una descripción (Opcional)</textarea>
+                        <textarea name="descripcion" id="descripcion" rows="10" cols="50" placeholder="Ingresa una descripción (Opcional)"></textarea>
 
-                        <label for="Fotos">Fotos (Máximo 5):</label>
-                        <input type="file" id="fotos1" name="fotos">
-                        <input type="file" id="fotos2" name="fotos">
-                        <input type="file" id="fotos3" name="fotos">
-                        <input type="file" id="fotos4" name="fotos">
-                        <input type="file" id="fotos5" name="fotos">
+                        <label for="fotos1">Fotos (Máximo 5):</label>
+                        <input type="file" id="fotos1" name="fotos" multiple>
 
                     </div>
+
+                    <button id="submit-btn" type="button">Enviar</button>
                 </form>
             </div>
         </div>

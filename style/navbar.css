@@ -42,7 +42,10 @@ body {
 }
 
 .navbar-left {
+    display: flex;
+    flex-direction: row;
     margin-left: 1em;
+    gap: 15px;
 }
 
 .navbar-right {

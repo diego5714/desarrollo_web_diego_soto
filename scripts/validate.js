@@ -1,14 +1,11 @@
-const validarRegion = (region) => {
-    if (!region) return false;
+const validarRegionComuna = (region, comuna) => {
+    if (!region || !comuna) return false;
     if (!(region in region_comuna)) return false;
+    
+    let comunas = region_comuna[region];
+    if (!(comunas.includes(comuna))) return false;
 
-    return true;
-}
-
-const validarComuna = (comuna, region) => {
-    if (!comuna) return false;
-    if (!(comuna in region_comuna[region])) return false;
-
+    console.log("Comuna/Region correctos");
     return true;
 }
 
@@ -31,7 +28,7 @@ const validarNombre = (nombre) => {
 
 const validarEmail = (email) => {
     if (!email) return false;
-    let largoValido = email.length >= 100;
+    let largoValido = email.length <= 100;
 
     // Se valida formato con regex (No es perfecto pero funciona)
     let regex = /^[\w.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
@@ -54,9 +51,20 @@ const validarTelefono = (telefono) => {
 }
 
 const validarContacto = (contacto) => {
-    if (contacto){
+    let largo = contacto.trim().length;
+    let largoValido = largo >= 4 && largo <= 50;
+
+    return largoValido;
+}
+
+const validarContactos = (contactos) => {
+    if (contactos.length != 0){
+        if (contactos.length > 5) return false;
         
-        //Falta logica aqui
+        for (const contacto of contactos){
+            let valido = validarContacto(contacto);
+            if (!valido) return false;
+        }
         
         return true
     }
@@ -64,8 +72,21 @@ const validarContacto = (contacto) => {
     return true
 }
 
-const validarSelect = (select) => {
-    if (!select) return false;
+const validarTipo = (tipo) => {
+    if (!tipo) return false;
+
+    let tipos = ["Perro", "Gato"];
+    if (!(tipos.includes(tipo))) return false;
+    
+    return true;
+}
+
+const validarUnidad = (unidad) => {
+    if (!unidad) return false;
+
+    let unidades = ["Meses", "Años"];
+    if (!(unidades.includes(unidad))) return false;
+    
     return true;
 }
 
@@ -86,3 +107,187 @@ const validarDateTime = (datetime_string) => {
 
     return true;
 }
+
+const validarArchivos = (archivos) => {
+    if (!archivos) return false;
+    let largo = archivos.length
+    let largoValido = largo >= 1 && largo <= 5;
+
+    let tipoValido = true;
+    for (const archivo of archivos){
+        let fileFamily = archivo.type.split("/")[0];
+        tipoValido &&= fileFamily == "image";
+    }
+
+    return largoValido && tipoValido
+}
+
+const validateForm = () => {
+    
+    console.log("Ejecutando validación");
+
+    let Formulario = document.forms["formulario"];
+    let region = Formulario["region"].value;
+    let comuna = Formulario["comuna"].value;
+    let sector = Formulario["sector"].value;
+
+    let nombre = Formulario["nombre"].value;
+    let email = Formulario["email"].value;
+    let telefono = Formulario["telefono"].value;
+    
+    let redes = [];
+    let whatsapp = Formulario["whatsapp-input"].value;
+    let telegram = Formulario["telegram-input"].value;
+    let twitter = Formulario["twitter-input"].value;
+    let instagram = Formulario["instagram-input"].value;
+    let tiktok = Formulario["tiktok-input"].value;
+    let otra = Formulario["other-input"].value;
+
+    if (whatsapp) redes.push(whatsapp);
+    if (telegram) redes.push(telegram); 
+    if (twitter) redes.push(twitter); 
+    if (instagram) redes.push(instagram); 
+    if (tiktok) redes.push(tiktok); 
+    if (otra) redes.push(otra); 
+
+    let tipo = Formulario["tipo"].value;
+    let cantidad = Formulario["cantidad"].value;
+    let edad = Formulario["edad"].value;
+    let unidad = Formulario["unidad"].value;
+    let fecha = Formulario["fecha"].value;
+    let fotos = Formulario["fotos"].files;
+    
+
+    // variables auxiliares de validación y función.
+    let invalidInputs = [];
+    let isValid = true;
+    const setInvalidInput = (inputName) => {
+        invalidInputs.push(inputName);
+        isValid &&= false;
+    };
+
+    // lógica de validación
+    if (!validarRegionComuna(region, comuna)){
+        setInvalidInput("Región y/o Comuna");
+    }
+    if (!validarSector(sector)){
+        setInvalidInput("Sector (A lo mas 100 caracteres)");
+    }
+    if (!validarNombre(nombre)) {
+        setInvalidInput("Nombre (Entre 3 y 200 caracteres)");
+    }
+    if (!validarEmail(email)) {
+        setInvalidInput("Email");
+    }
+    if (!validarTelefono(telefono)) {
+        setInvalidInput("Teléfono (+569.12345678)");
+    }
+    if (!validarContactos(redes)){
+        setInvalidInput("Redes Sociales");
+    }
+    if (!validarTipo(tipo)){
+        setInvalidInput("Tipo de mascota");
+    }
+    if (!validarEntero(cantidad)){
+        setInvalidInput("Cantidad");
+    }
+    if (!validarEntero(edad)){
+        setInvalidInput("Edad");
+    }
+    if (!validarUnidad(unidad)){
+        setInvalidInput("Unidad de tiempo");
+    }
+    if (!validarDateTime(fecha)){
+        setInvalidInput("Fecha de entrega (No menos de 3 horas en el futuro)");
+    }
+    if (!validarArchivos(fotos)) {
+        setInvalidInput("Fotos");
+    }
+
+    // finalmente mostrar la validación
+    let validationBox = document.getElementById("val-box");
+    let validationMessageElem = document.getElementById("val-msg");
+    let validationListElem = document.getElementById("val-list");
+    
+    let confirmationBox = document.getElementById("confirm-box");
+    let confirmationMessageElem = document.getElementById("confirm-msg");
+    let confirmationListElem = document.getElementById("confirm-list");
+
+
+    if (!isValid) {
+        validationListElem.textContent = "";
+        // agregar elementos inválidos al elemento val-list.
+        for (input of invalidInputs) {
+        let listElement = document.createElement("li");
+        listElement.innerText = input;
+        validationListElem.append(listElement);
+        }
+        // establecer val-msg
+        validationMessageElem.innerText = "Los siguientes campos son inválidos:";
+
+        // aplicar estilos de error
+        validationBox.style.backgroundColor = "#ffdddd";
+        validationBox.style.borderLeftColor = "#f44336";
+
+        // hacer visible el mensaje de validación
+        validationBox.hidden = false;
+    } else {
+        // Ocultar el formulario
+        Formulario.style.display = "none";
+
+        // establecer mensaje de éxito
+        confirmationMessageElem.innerText = "¿Está seguro que desea agregar este aviso de adopción?";
+        confirmationListElem.textContent = "";
+
+        // aplicar estilos de éxito
+        confirmationBox.style.backgroundColor = "#ddffdd";
+        confirmationBox.style.borderLeftColor = "#4CAF50";
+
+        // Agregar botones para enviar el formulario o volver
+        let submitButton = document.createElement("button");
+        submitButton.innerText = "Sí, estoy seguro";
+        submitButton.style.marginRight = "10px";
+        submitButton.addEventListener("click", () => {
+            // Formulario.submit();
+            // no tenemos un backend al cual enviarle los datos
+            confirmationBox.hidden = true;
+            mostrarPantallaExito();
+        });
+
+        let backButton = document.createElement("button");
+        backButton.innerText = "No, no estoy seguro, quiero volver al formulario";
+        backButton.addEventListener("click", () => {
+        // Mostrar el formulario nuevamente
+        Formulario.style.display = "flex";
+        confirmationBox.hidden = true;
+        });
+
+        confirmationListElem.appendChild(submitButton);
+        confirmationListElem.appendChild(backButton);
+
+        // hacer visible el mensaje de validación
+        confirmationBox.hidden = false;
+    }
+}
+
+const mostrarPantallaExito = () => {
+    let successBox = document.getElementById("success-box");
+    let successMessageElem = document.getElementById("success-msg");
+    let successListElem = document.getElementById("success-list");
+
+    successMessageElem.innerText = "Hemos recibido la información de adopción, muchas gracias y suerte";
+    successListElem.textContent = "";
+
+    let submitButton = document.createElement("button");
+    submitButton.innerText = "Volver al inicio";
+    submitButton.style.marginRight = "10px";
+    submitButton.addEventListener("click", () => {
+        window.location.href = '/';
+    });
+
+    successListElem.appendChild(submitButton);
+    successBox.hidden = false;
+}
+
+let submitBtn = document.getElementById("submit-btn");
+submitBtn.addEventListener("click", validateForm);

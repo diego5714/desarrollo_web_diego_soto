@@ -1,0 +1,30 @@
+.publication-container {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px
+    
+}
+
+.publication-left,
+.publication-middle,
+.publication-right {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 30%;
+}
+
+.post-image {
+    margin-top: 20px;
+    width: 320px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+}
