@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nueva Publicación</title>
     
-    <link rel="stylesheet" type="text/css" href="style/navbar.css">
-    <link rel="stylesheet" type="text/css" href="style/form.css">
-    <link rel="stylesheet" type="text/css" href="style/index.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/form.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/index.css') }}">
 </head>
 
 <body>
     <div class="navbar">
         <div class="navbar-left">
             <a href="/" class="navbar-logo"> Plataforma de Adopción </a>
-            <a href="listado.html" class="navbar-logo">Listado</a>
-            <a href="estadisticas.html" class="navbar-logo">Estadísticas</a>
+            <a href="/publications" class="navbar-logo">Listado</a>
+            <a href="/statistics" class="navbar-logo">Estadísticas</a>
         </div>
         
         <div class="navbar-right">
@@ -160,10 +160,10 @@
             </div>
         </div>
     </main>
-
-    <script src="scripts/region_comuna.js"></script>
-    <script src="scripts/poblar_campos.js"></script>
-    <script src="scripts/validate.js"></script>
+    
+    <script src="{{ url_for('static', filename='scripts/region_comuna.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/populate_fields.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/validate.js') }}"></script>
 
 </body>
 

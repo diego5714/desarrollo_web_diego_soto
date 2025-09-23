@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listado de publicaciones</title>
     
-    <link rel="stylesheet" type="text/css" href="style/navbar.css">
-    <link rel="stylesheet" type="text/css" href="style/listing.css">
-    <link rel="stylesheet" type="text/css" href="style/index.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/listing.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/index.css') }}">
 </head>
 
 <body>
     <div class="navbar">
         <div class="navbar-left">
             <a href="/" class="navbar-logo"> Plataforma de Adopción </a>
-            <a href="formulario.html" class="navbar-logo"> Agregar publicación </a>
-            <a href="estadisticas.html" class="navbar-logo">Estadísticas</a>
+            <a href="/form" class="navbar-logo"> Agregar publicación </a>
+            <a href="/statistics" class="navbar-logo">Estadísticas</a>
         </div>
         
         <div class="navbar-right">
@@ -32,7 +32,7 @@
             <div class="list-container">
                 <table>
                     <thead>
-                        <tr data-href="publicacion.html">
+                        <tr data-href="/publication">
                             <th>Fecha Publicación</th>
                             <th>Fecha Entrega</th>
                             <th>Comuna</th>
@@ -43,7 +43,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-href="publicacion.html">
+                        <tr data-href="/publication">
                             <th>2025-08-18</th>
                             <th>2025-08-29</th>
                             <th>Santiago</th>
@@ -53,7 +53,7 @@
                             <th>2</th>
                         </tr>
 
-                        <tr data-href="publicacion.html">
+                        <tr data-href="/publication">
                             <th>2025-08-18</th>
                             <th>2025-08-29</th>
                             <th>Santiago</th>
@@ -63,7 +63,7 @@
                             <th>2</th>
                         </tr>
 
-                        <tr data-href="publicacion.html">
+                        <tr data-href="/publication">
                             <th>2025-08-18</th>
                             <th>2025-08-29</th>
                             <th>Santiago</th>
@@ -73,7 +73,7 @@
                             <th>2</th>
                         </tr>
 
-                        <tr data-href="publicacion.html">
+                        <tr data-href="/publication">
                             <th>2025-08-18</th>
                             <th>2025-08-29</th>
                             <th>Santiago</th>
@@ -83,7 +83,7 @@
                             <th>2</th>
                         </tr>
 
-                        <tr data-href="publicacion.html">
+                        <tr data-href="/publication">
                             <th>2025-08-18</th>
                             <th>2025-08-29</th>
                             <th>Santiago</th>
@@ -100,7 +100,7 @@
         </div>
     </main>
 
-    <script src="scripts/redireccion.js"></script>
+    <script src="{{ url_for('static', filename='scripts/redirection.js') }}"></script>
 </body>
 
 </html>

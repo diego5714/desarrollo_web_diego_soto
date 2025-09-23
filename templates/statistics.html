@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas</title>
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/index.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/statistics.css') }}">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="/" class="navbar-logo"> Plataforma de Adopción </a>
+            <a href="/form" class="navbar-logo"> Agregar publicación </a>
+            <a href="/publications" class="navbar-logo">Listado</a>
+        </div>
+        
+        <div class="navbar-right">
+            <div class="login-buttons">
+                ¿Aun no tienes cuenta?
+                <a href="/" class="btn btn-outline-success">Registrate</a>
+            </div>
+        </div>
+    </div>
+    
+    <main>
+        <div class="main-cols">
+            <div class="statistics-container">
+                <img src="{{ url_for('static', filename='images/data/adopciones-dias.png') }}" alt="Publicaciones de adopción segun los dias">
+                <img src="{{ url_for('static', filename='images/data/porcentaje-tipos.png') }}" alt="Porcentaje de publicaciones según el tipo de mascota">
+                <img src="{{ url_for('static', filename='images/data/barras-perros-gatos.png') }}" alt="Número de publicaciones según mes y tipo">
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

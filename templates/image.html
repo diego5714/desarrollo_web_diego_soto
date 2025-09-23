@@ -6,18 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publicación</title>
     
-    <link rel="stylesheet" type="text/css" href="style/navbar.css">
-    <link rel="stylesheet" type="text/css" href="style/image.css">
-    <link rel="stylesheet" type="text/css" href="style/index.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/image.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/index.css') }}">
 </head>
 
 <body>
     <div class="navbar">
         <div class="navbar-left">
             <a href="/" class="navbar-logo"> Plataforma de Adopción </a>
-            <a href="formulario.html" class="navbar-logo"> Agregar publicación </a>
-            <a href="listado.html" class="navbar-logo">Listado</a>
-            <a href="estadisticas.html" class="navbar-logo">Estadísticas</a>
+            <a href="/form" class="navbar-logo"> Agregar publicación </a>
+            <a href="/publications" class="navbar-logo">Listado</a>
+            <a href="/statistics" class="navbar-logo">Estadísticas</a>
         </div>
         
         <div class="navbar-right">
@@ -31,8 +31,8 @@
     <main>
         <div class="main-cols">
             <div class="publication-container">
-                <a href="publicacion.html">Volver a la publicación</a>
-                <img src="Imagenes/Gato-1-Highres.jpg" class="post-image" width="800" height="600" alt="Gato">
+                <a href="/publication">Volver a la publicación</a>
+                <img src="{{ url_for('static', filename='images/posts/Gato-1-Highres.jpg') }}" class="post-image" width="800" height="600" alt="Gato">
             </div>
         </div>
     </main>
