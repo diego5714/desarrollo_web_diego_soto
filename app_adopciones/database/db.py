@@ -12,7 +12,8 @@ from sqlalchemy import (
 
 from sqlalchemy.orm import Session, sessionmaker, declarative_base, relationship
 from datetime import datetime
-import json
+from typing import override
+#import json
 
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
@@ -25,11 +26,11 @@ DATABASE_URL: str = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_
 engine: Engine = create_engine(DATABASE_URL, echo = False, future = True)
 SessionLocal: sessionmaker[Session] = sessionmaker(bind = engine)
 
-Base = declarative_base()
+Base = declarative_base()  # pyright: ignore[reportAny]
 
 # Modelos ################################################################################################################
 
-class Region(Base):
+class Region(Base):  # pyright: ignore[reportAny]
     __tablename__: str = 'region'
 
     # Llave primaria
@@ -42,11 +43,12 @@ class Region(Base):
     comunas = relationship("Comuna", back_populates = "region")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     # Metodo para imprimir y debugear
+    @override
     def __repr__(self) -> str:
         return f"<Region(id={self.id}, nombre='{self.nombre}')>"
 
 
-class Comuna(Base):
+class Comuna(Base):  # pyright: ignore[reportAny]
     __tablename__: str = 'comuna'
 
     # Llave primaria
@@ -65,12 +67,13 @@ class Comuna(Base):
     avisos = relationship("AvisoAdopcion", back_populates = "comuna")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     # Metodo para imprimir y debugear
+    @override
     def __repr__(self):
         return f"<Comuna(id={self.id}, nombre='{self.nombre}')>"
 
 
-class AvisoAdopcion(Base):
-    __tablename__ = 'aviso_adopcion'
+class AvisoAdopcion(Base):  # pyright: ignore[reportAny]
+    __tablename__: str = 'aviso_adopcion'
 
     # Llave primaria
     id: Column[int] = Column(Integer, primary_key = True, autoincrement = True)
@@ -101,11 +104,12 @@ class AvisoAdopcion(Base):
     contactos = relationship("ContactarPor", back_populates = "aviso")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     # Método para imprimir y debugear
+    @override
     def __repr__(self) -> str:
         return f"<AvisoAdopcion(id={self.id}, nombre='{self.nombre}', tipo='{self.tipo}')>"
 
 
-class Foto(Base):
+class Foto(Base):  # pyright: ignore[reportAny]
     __tablename__: str = 'foto'
 
     # Llave primaria
@@ -121,11 +125,12 @@ class Foto(Base):
     aviso = relationship("AvisoAdopcion", back_populates = "fotos")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     # Método para imprimir y debugear
+    @override
     def __repr__(self) -> str:
         return f"<Foto(id={self.id}, nombre_archivo='{self.nombre_archivo}')>"
 
 
-class ContactarPor(Base):
+class ContactarPor(Base):  # pyright: ignore[reportAny]
     __tablename__: str = 'contactar_por'
 
     # Llave primaria
@@ -141,6 +146,7 @@ class ContactarPor(Base):
     aviso = relationship("AvisoAdopcion", back_populates = "contactos")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     # Método para imprimir y debugear
+    @override
     def __repr__(self) -> str:
         return f"<ContactarPor(id={self.id}, nombre='{self.nombre}', identificador='{self.identificador}')>"
 
