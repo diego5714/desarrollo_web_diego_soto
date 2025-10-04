@@ -1,3 +1,4 @@
 enunciados/
 venv/
+__pycache__/
 desarrollo_web_diego_soto.code-workspace
