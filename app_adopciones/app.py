@@ -1,8 +1,14 @@
 from flask import Flask, request, render_template, redirect, url_for
 from markupsafe import escape
 
+UPLOAD_FOLDER = 'static/upload'
+
 app = Flask(__name__)
 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+# Rutas de la aplicación ###################################################
 @app.route('/')
 def index():
     return render_template('index.html')
