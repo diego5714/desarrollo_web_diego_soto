@@ -8,12 +8,13 @@ from sqlalchemy import (
     Enum,
     Text,
     ForeignKey,
+    desc,
+    func,
 )
 
-from sqlalchemy.orm import Session, sessionmaker, declarative_base, relationship
+from sqlalchemy.orm import Session, joinedload, sessionmaker, declarative_base, relationship
 from datetime import datetime
 from typing import override
-#import json
 
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
@@ -154,8 +155,52 @@ class ContactarPor(Base):  # pyright: ignore[reportAny]
 # Funciones de la base de datos ##########################################################################################
 
 def obtener_avisos(page_size: int) -> list[AvisoAdopcion]:
-    session: Session = SessionLocal()
-    avisos: list[AvisoAdopcion] = session.query(AvisoAdopcion).limit(page_size).all()
-    session.close()
+    with SessionLocal() as session:
+        avisos: list[AvisoAdopcion] = session.query(AvisoAdopcion)\
+            .options(joinedload(AvisoAdopcion.fotos), joinedload(AvisoAdopcion.contactos), joinedload(AvisoAdopcion.comuna))\
+            .order_by(desc(AvisoAdopcion.fecha_ingreso))\
+            .limit(page_size).all()
 
     return avisos
+
+def obtener_aviso_por_id(id: int) -> AvisoAdopcion | None:
+    with SessionLocal() as session:
+    
+        aviso: AvisoAdopcion = session.query(AvisoAdopcion)\
+            .options(joinedload(AvisoAdopcion.fotos), 
+            joinedload(AvisoAdopcion.contactos), 
+            joinedload(AvisoAdopcion.comuna), 
+            joinedload(AvisoAdopcion.comuna).joinedload(Comuna.region))\
+            .filter_by(id=id).first()
+
+    return aviso
+
+def obtener_avisos_por_pagina(pagina_idx: int, avisos_por_pagina: int) -> tuple[list[AvisoAdopcion], int]:
+    """Obtiene una lista paginada de avisos y el total de avisos obtenidos en dicha pagina"""
+
+    with SessionLocal() as session:
+        # Calculamos offset
+        offset = (pagina_idx - 1) * avisos_por_pagina
+
+        query = session.query(AvisoAdopcion)\
+            .options(
+                joinedload(AvisoAdopcion.comuna),
+                joinedload(AvisoAdopcion.fotos)
+            )\
+            .order_by(desc(AvisoAdopcion.fecha_ingreso))
+
+        # Obtenemos el total de avisos antes de paginar
+        items_totales = session.query(func.count(AvisoAdopcion.id)).scalar()  # pyright: ignore[reportAny]
+
+        # Se aplica limite y offset para obtener solo pagina actual
+        avisos_paginados: list[AvisoAdopcion] = query.limit(avisos_por_pagina).offset(offset).all()
+
+        return avisos_paginados, items_totales
+
+
+def obtener_foto_por_ids(aviso_id: int, foto_id: int) -> Foto:
+    with SessionLocal() as session:
+
+        foto: Foto = session.query(Foto).options(joinedload(Foto.aviso)).filter_by(id=foto_id, aviso_id = aviso_id).first()
+
+    return foto
