@@ -15,8 +15,13 @@ table {
     border-collapse: collapse;
 }
 
-th, tr {
-    border: 1px solid grey
+th, tr, td {
+    border: 1px solid grey;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+
 }
 
 tr:hover {
