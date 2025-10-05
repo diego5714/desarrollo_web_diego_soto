@@ -2,4 +2,8 @@ enunciados/
 venv/
 __pycache__/
 desarrollo_web_diego_soto.code-workspace
-app_adopciones/static/uploads/
+app_adopciones/static/uploads/*.jpg
+app_adopciones/static/uploads/*.jpeg
+app_adopciones/static/uploads/*.png
+app_adopciones/static/uploads/*.gif
+app_adopciones/static/uploads/*.webp
