@@ -1,42 +1,18 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publicación</title>
-    
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/navbar.css') }}">
+{% block title %}Imagen{% endblock %}
+
+{% block style %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/image.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/index.css') }}">
-</head>
+{% endblock %}
 
-<body>
-    <div class="navbar">
-        <div class="navbar-left">
-            <a href="/" class="navbar-logo"> Plataforma de Adopción </a>
-            <a href="/form" class="navbar-logo"> Agregar publicación </a>
-            <a href="/publications" class="navbar-logo">Listado</a>
-            <a href="/statistics" class="navbar-logo">Estadísticas</a>
-        </div>
-        
-        <div class="navbar-right">
-            <div class="login-buttons">
-                ¿Aun no tienes cuenta?
-                <a href="/" class="btn btn-outline-success">Registrate</a>
-            </div>
-        </div>
+{% block content %}
+    <div class="publication-container">
+        <a href="{{ url_for('publication', id=foto.aviso_id) }}">Volver a la publicación</a>
+        <img src="{{ url_for('static', filename=foto.ruta_archivo) }}" class="post-image" width="800" height="600" alt="Gato">
     </div>
-    
-    <main>
-        <div class="main-cols">
-            <div class="publication-container">
-                <a href="/publication">Volver a la publicación</a>
-                <img src="{{ url_for('static', filename='images/posts/Gato-1-Highres.jpg') }}" class="post-image" width="800" height="600" alt="Gato">
-            </div>
-        </div>
-    </main>
+{% endblock %}
 
-</body>
-
-</html>
+{% block scripts %}
+    {# Este template no usa scripts #}
+{% endblock %}

@@ -1,71 +1,58 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publicación</title>
-    
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/navbar.css') }}">
+{% block title %}Publicación{% endblock %}
+
+{% block style %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/publication.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/index.css') }}">
-</head>
+{% endblock %}
 
-<body>
-    <div class="navbar">
-        <div class="navbar-left">
-            <a href="/" class="navbar-logo"> Plataforma de Adopción </a>
-            <a href="/form" class="navbar-logo"> Agregar publicación </a>
-            <a href="/publications" class="navbar-logo">Listado</a>
-            <a href="/statistics" class="navbar-logo">Estadísticas</a>
+{% block content %}
+    <div class="publication-container">
+        <div class="publication-left">
+            <h2>Donde?</h2>
+            <p>{{ aviso.comuna.region.nombre }}, Comuna de {{ aviso.comuna.nombre }}</p>
+            {% if aviso.sector %}
+                <p>Sector: {{ aviso.sector }}</p>
+            {% endif %}
+
+            <h2>Datos de contacto</h2>
+            <p>Nombre: {{ aviso.nombre }}</p>
+            <p>Correo: {{ aviso.email }}</p>
+            {% if aviso.celular %}
+                <p>Teléfono: {{ aviso.celular }}</p>
+            {% endif %}
+
+            <h2>Redes sociales</h2>
+            {% for contacto in aviso.contactos %}
+                <p>{{ contacto.nombre | capitalize }}: {{ contacto.identificador }}</p>
+
+            {% else %}
+                <p>No se indicó ninguna red social</p>
+            {% endfor %}
+
         </div>
-        
-        <div class="navbar-right">
-            <div class="login-buttons">
-                ¿Aun no tienes cuenta?
-                <a href="/" class="btn btn-outline-success">Registrate</a>
-            </div>
+        <div class="publication-middle">
+            <h2>Datos de la mascota</h2>
+
+            <p>{{ aviso.cantidad }} {{ aviso.tipo | capitalize }}</p>
+            <p>Edad: {{ aviso.edad }} {% if aviso.unidad_medida == 'a' %}Años{% else %}Meses{% endif %}</p>
+            <p>Fecha y hora de entrega: {{ aviso.fecha_entrega.strftime('%d-%m-%Y a las %H:%M') }}</p>
+
+            {% if aviso.descripcion %}
+                <p>Descripción: {{ aviso.descripcion }}</p>
+            {% endif %}
+
+        </div>
+        <div class="publication-right">
+            {% for foto in aviso.fotos %}
+            <a href="{{ url_for('image', foto_id=foto.id, aviso_id=aviso.id) }}">
+                <img src="{{ url_for('static', filename=foto.ruta_archivo) }}" class="post-image" width="320" height="240" alt="{{ aviso.tipo }}">
+            </a>
+            {% endfor %}
         </div>
     </div>
-    
-    <main>
-        <div class="main-cols">
-            <div class="publication-container">
-                <div class="publication-left">
-                    <h2>Donde?</h2>
-                    <p>Región Metropolitana, Comuna de Santiago</p>
-                    <p>Sector: Beauchef 850, Terraza</p>
+{% endblock %}
 
-                    <h2>Datos de contacto</h2>
-                    <p>Nombre: Juanita Pérez</p>
-                    <p>Correo: jperez@example.com</p>
-                    <p>Teléfono: +569.12345678</p>
-
-                    <h2>Redes sociales</h2>
-                    <p>Instagram: @jperezexample</p>
-                    <p>Telegram: @jperezexample1</p>
-
-
-                </div>
-                <div class="publication-middle">
-                    <h2>Datos de la mascota</h2>
-
-                    <p>1 Gato</p>
-                    <p>Edad: 2 Meses</p>
-                    <p>Fecha de entrega: 2025-08-29</p>
-                    <p>Hora de entrega: 14:00</p>
-
-                    <p>Descripción: ¡Hola! Soy un pequeño gatito de apenas 2 meses, lleno de energía y ganas de jugar. Estoy buscando una familia que me dé mucho cariño y me ayude a crecer sano y feliz. Si buscas un compañero peludo que te llene de alegría y ronroneos, ¡soy el indicado! Ya estoy desparasitado y con mi primera vacuna.</p>
-                </div>
-                <div class="publication-right">
-                    <a href="/image">
-                        <img src="{{ url_for('static', filename='images/posts/Gato-1.jpg') }}" class="post-image" width="320" height="240" alt="Gato">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-</body>
-
-</html>
+{% block scripts %}
+    {# Este template no usa scripts #}
+{% endblock %}

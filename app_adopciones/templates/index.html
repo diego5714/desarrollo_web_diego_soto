@@ -1,147 +1,64 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal</title>
-    
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/navbar.css') }}">
+{% block title %}Página Principal{% endblock %}
+
+{% block style %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/posts.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/index.css') }}">
+{% endblock %}
 
-</head>
-
-<body>
-    <div class="navbar">
-        <div class="navbar-left">
-            <a href="/" class="navbar-logo"> Plataforma de Adopción </a>
-            <a href="/form" class="navbar-logo"> Agregar publicación </a>
-            <a href="/publications" class="navbar-logo">Listado</a>
-            <a href="/statistics" class="navbar-logo">Estadísticas</a>
-        </div>
-        
-        <div class="navbar-right">
-            <div class="login-buttons">
-                ¿Aun no tienes cuenta?
-                <a href="/" class="btn btn-outline-success">Registrate</a>
-            </div>
-        </div>
-    </div>
-    
-    <main>
-        <div class="main-cols">
+{% block content %}
             <div class="posts-container">
+                
+                {% for aviso in avisos %}
                 <div class="Post">
                     
                     <div class="post-header">
                         <h1 class="post-title">
-                            <a href="/">Gato</a>
+                            <a href="{{ url_for('publication', id=aviso.id) }}">{{ aviso.nombre }}</a>
                         </h1>
-                        <p class="post-date">Fecha de entrega: 2:53 25-6-2025</p>
+                        <p class="post-date">Fecha de entrega: {{ aviso.fecha_entrega }}</p>
                     </div>
                     
                     <div class="post-divider">
                         <div class="post-left">
-                            <img src="{{ url_for('static', filename='images/posts/Gato-1.jpg') }}" class="post-image" width="500" height="300" alt="Gato">
+                            {% if aviso.fotos %}
+                                <img src="{{ url_for('static', filename=aviso.fotos[0].ruta_archivo) }}" class="post-image" width="320" height="240" alt="{{ aviso.tipo }}">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='images/posts/default.jpg') }}" class="post-image" width="320" height="240" alt="{{ aviso.tipo }}">
+                            {% endif %}
                         </div>
 
                         <div class="post-right">
                             <div class="post-info-container">
                                 <div class="post-info-line">
-                                    Edad: 2 Meses
+                                    Edad: {{ aviso.edad }} {% if aviso.unidad_medida == 'a' %}Años{% else %}Meses{% endif %}
                                 </div>
                                 <div class="post-info-line">
-                                    Cantidad: 1
+                                    Cantidad: {{ aviso.cantidad }}
                                 </div>
                                 <div class="post-info-line">
-                                    Comuna: Santiago
+                                    Comuna: {{ aviso.comuna.nombre }}
                                 </div>
                                 <div class="post-info-line">
-                                    Sector: Beauchef 850, Terraza
+                                    Sector: {{ aviso.sector }}
                                 </div>
                             </div>
 
                         </div>
                     </div>
-                    
+
                 </div>
 
-                <div class="Post">
-                    
-                    <div class="post-header">
-                        <h1 class="post-title">
-                            <a href="/">Gato</a>
-                        </h1>
-                        <p class="post-date">Fecha de entrega: 12:53 25-6-2025</p>
+                {% else %}
+                    {# No hay avisos #}
+                    <div class="no-posts">
+                        <h2>No hay publicaciones disponibles</h2>
                     </div>
-                    
-                    <div class="post-divider">
-                        <div class="post-left">
-                            <img src="{{ url_for('static', filename='images/posts/Gato-1.jpg') }}" class="post-image" width="500" height="300" alt="Gato">
-                        </div>
+                {% endfor %}
 
-                        <div class="post-right">
-                            <div class="post-info-container">
-                                <div class="post-info-line">
-                                    Edad: 2 Meses
-                                </div>
-                                <div class="post-info-line">
-                                    Cantidad: 1
-                                </div>
-                                <div class="post-info-line">
-                                    Comuna: Santiago
-                                </div>
-                                <div class="post-info-line">
-                                    Sector: Beauchef 850, Terraza
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    
-                </div>
-
-                <div class="Post">
-                    
-                    <div class="post-header">
-                        <h1 class="post-title">
-                            <a href="/">Gato</a>
-                        </h1>
-                        <p class="post-date">Fecha de entrega: 12:53 25-6-2025</p>
-                    </div>
-                    
-                    <div class="post-divider">
-                        <div class="post-left">
-                            <img src="{{ url_for('static', filename='images/posts/Gato-1.jpg') }}" class="post-image" width="500" height="300" alt="Gato">
-                        </div>
-
-                        <div class="post-right">
-                            <div class="post-info-container">
-                                <div class="post-info-line">
-                                    Edad: 2 Meses
-                                </div>
-                                <div class="post-info-line">
-                                    Cantidad: 1
-                                </div>
-                                <div class="post-info-line">
-                                    Comuna: Santiago
-                                </div>
-                                <div class="post-info-line">
-                                    Sector: Beauchef 850, Terraza
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    
-                </div>
-
-                        
             </div>
-        </div>
-    </main>
+{% endblock %}
 
-</body>
-
-</html>
+{% block scripts %}
+    {# Este template no usa scripts #}
+{% endblock %}

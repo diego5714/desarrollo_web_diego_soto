@@ -7,8 +7,11 @@
     <title>{% block title %}{% endblock %}</title>
     
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/navbar.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/posts.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/index.css') }}">
+
+    {% block style %}
+    
+    {% endblock %}
 
 </head>
 
@@ -23,7 +26,7 @@
         
         <div class="navbar-right">
             <div class="login-buttons">
-                ¿Aun no tienes cuenta?
+                ¿Aún no tienes cuenta?
                 <a href="/" class="btn btn-outline-success">Registrate</a>
             </div>
         </div>
@@ -31,116 +34,15 @@
     
     <main>
         <div class="main-cols">
-            <div class="posts-container">
-                <div class="Post">
-                    
-                    <div class="post-header">
-                        <h1 class="post-title">
-                            <a href="/">Gato</a>
-                        </h1>
-                        <p class="post-date">Fecha de entrega: 2:53 25-6-2025</p>
-                    </div>
-                    
-                    <div class="post-divider">
-                        <div class="post-left">
-                            <img src="{{ url_for('static', filename='images/posts/Gato-1.jpg') }}" class="post-image" width="500" height="300" alt="Gato">
-                        </div>
+            {% block content %}
 
-                        <div class="post-right">
-                            <div class="post-info-container">
-                                <div class="post-info-line">
-                                    Edad: 2 Meses
-                                </div>
-                                <div class="post-info-line">
-                                    Cantidad: 1
-                                </div>
-                                <div class="post-info-line">
-                                    Comuna: Santiago
-                                </div>
-                                <div class="post-info-line">
-                                    Sector: Beauchef 850, Terraza
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    
-                </div>
-
-                <div class="Post">
-                    
-                    <div class="post-header">
-                        <h1 class="post-title">
-                            <a href="/">Gato</a>
-                        </h1>
-                        <p class="post-date">Fecha de entrega: 12:53 25-6-2025</p>
-                    </div>
-                    
-                    <div class="post-divider">
-                        <div class="post-left">
-                            <img src="{{ url_for('static', filename='images/posts/Gato-1.jpg') }}" class="post-image" width="500" height="300" alt="Gato">
-                        </div>
-
-                        <div class="post-right">
-                            <div class="post-info-container">
-                                <div class="post-info-line">
-                                    Edad: 2 Meses
-                                </div>
-                                <div class="post-info-line">
-                                    Cantidad: 1
-                                </div>
-                                <div class="post-info-line">
-                                    Comuna: Santiago
-                                </div>
-                                <div class="post-info-line">
-                                    Sector: Beauchef 850, Terraza
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    
-                </div>
-
-                <div class="Post">
-                    
-                    <div class="post-header">
-                        <h1 class="post-title">
-                            <a href="/">Gato</a>
-                        </h1>
-                        <p class="post-date">Fecha de entrega: 12:53 25-6-2025</p>
-                    </div>
-                    
-                    <div class="post-divider">
-                        <div class="post-left">
-                            <img src="{{ url_for('static', filename='images/posts/Gato-1.jpg') }}" class="post-image" width="500" height="300" alt="Gato">
-                        </div>
-
-                        <div class="post-right">
-                            <div class="post-info-container">
-                                <div class="post-info-line">
-                                    Edad: 2 Meses
-                                </div>
-                                <div class="post-info-line">
-                                    Cantidad: 1
-                                </div>
-                                <div class="post-info-line">
-                                    Comuna: Santiago
-                                </div>
-                                <div class="post-info-line">
-                                    Sector: Beauchef 850, Terraza
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    
-                </div>
-
-                        
-            </div>
+            {% endblock %}
         </div>
     </main>
+
+    {% block scripts %}
+
+    {% endblock %}
 
 </body>
 
