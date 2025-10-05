@@ -1,12 +1,13 @@
-const validarRegionComuna = (region, comuna) => {
-    if (!region || !comuna) return false;
-    if (!(region in region_comuna)) return false;
-    
-    let comunas = region_comuna[region];
-    if (!(comunas.includes(comuna))) return false;
+const validarRegionComuna = (region_id, comuna_id) => {
+    if (!region_id || !comuna_id) return false;
 
-    console.log("Comuna/Region correctos");
-    return true;
+    const region_encontrada = datos_regiones_comunas.find(region => region.id == region_id);
+    
+    if (!region_encontrada) return false;
+
+    const comuna_encontrada = region_encontrada.comunas.find(comuna => comuna.id == comuna_id);
+    
+    return comuna_encontrada !== undefined;
 }
 
 const validarSector = (sector) => {
@@ -30,8 +31,8 @@ const validarEmail = (email) => {
     if (!email) return false;
     let largoValido = email.length <= 100;
 
-    // Se valida formato con regex (No es perfecto pero funciona)
-    let regex = /^[\w.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    // Se valida formato con regex
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     let formatoValido = regex.test(email);
 
     return largoValido && formatoValido;
@@ -59,7 +60,7 @@ const validarContacto = (contacto) => {
 
 const validarContactos = (contactos) => {
     if (contactos.length != 0){
-        if (contactos.length > 5) return false;
+        if (contactos.length > 6) return false;
         
         for (const contacto of contactos){
             let valido = validarContacto(contacto);
@@ -248,8 +249,7 @@ const validateForm = () => {
         submitButton.innerText = "Sí, estoy seguro";
         submitButton.style.marginRight = "10px";
         submitButton.addEventListener("click", () => {
-            // Formulario.submit();
-            // no tenemos un backend al cual enviarle los datos
+            Formulario.submit();
             confirmationBox.hidden = true;
             mostrarPantallaExito();
         });

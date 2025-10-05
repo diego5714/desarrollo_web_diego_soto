@@ -2,31 +2,37 @@ let dateTimeMinimo;
 
 const PoblarRegiones = () => {
     let SelectRegion = document.getElementById("region");
-    for (const region in region_comuna){
+    
+    datos_regiones_comunas.forEach(region => {
         let option = document.createElement("option");
-        option.value = region;
-        option.text = region;
+        option.value = region.id;
+        option.text = region.nombre;
         SelectRegion.appendChild(option);
-    }
+    });
 }
 
 const updateComunas = () => {
-    let SelectRegion = document.getElementById("region");
-    let SelectComuna = document.getElementById("comuna");
-    let RegionSeleccionada = SelectRegion.value;
+    const SelectRegion = document.getElementById("region");
+    const SelectComuna = document.getElementById("comuna");
+    const RegionSeleccionadaId = SelectRegion.value;
 
     // Definimos el mensaje por defecto
     SelectComuna.innerHTML = '<option value="">Elige una comuna</option>';
 
-    // Si existen datos de comuna para la region seleccionada, iteramos colocando
-    // las opciones de comuna
-    if (region_comuna[RegionSeleccionada]){
-        region_comuna[RegionSeleccionada].forEach(comuna => {
-            let option = document.createElement("option");
-            option.value = comuna;
-            option.text = comuna;
-            SelectComuna.appendChild(option);
-        });
+    // Si se seleccionó una region válida (No por defecto)
+    if (RegionSeleccionadaId){
+        // Encontramos la region seleccionada en array de datos segun su ID
+        const region_encontrada = datos_regiones_comunas.find(region => region.id == RegionSeleccionadaId);
+
+        // Si la region fue encontrada, y tiene comunas, las poblamos
+        if (region_encontrada && region_encontrada.comunas){
+            region_encontrada.comunas.forEach(comuna => {
+                let option = document.createElement("option");
+                option.value = comuna.id;
+                option.text = comuna.nombre;
+                SelectComuna.appendChild(option);
+            });
+        }
     }
 }
 
@@ -97,4 +103,5 @@ window.onload = () => {
     PoblarRegiones();
     PoblarFechaHora();
     toggleRedes();
+    updateComunas();
 }
