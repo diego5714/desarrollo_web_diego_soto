@@ -37,6 +37,8 @@ def publication_form() -> str | Response:
             # Hubo un error al validar la información del formulario
             # Mostramos mensajes de error en la plantilla
 
+            print("Error de validacion")
+            print(errores)
             return render_template('form.html', errores=errores, form_data=request.form)
 
         session: Session = SessionLocal()
@@ -86,7 +88,7 @@ def publication_form() -> str | Response:
             contactos_info = {
                 'whatsapp': datos.get('whatsapp_id'),
                 'telegram': datos.get('telegram_id'),
-                'twitter': datos.get('twitter_id'),
+                'X': datos.get('twitter_id'),
                 'instagram': datos.get('instagram_id'),
                 'tiktok': datos.get('tiktok_id'),
                 'otra': datos.get('otro_id')
@@ -111,6 +113,8 @@ def publication_form() -> str | Response:
             # Algo fallo, deshacemos cualquier cambio que se haya hecho
             session.rollback()
             #flash(f"Ocurrió un error al crear el aviso: {e}", "error")
+
+            print(f"ERROR DURANTE LA INSERCIÓN: {e}")
             
             return render_template('form.html', form_data = request.form)
 
