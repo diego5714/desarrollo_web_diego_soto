@@ -40,10 +40,10 @@ class Region(Base):  # pyright: ignore[reportAny]
     # Otras columnas
     nombre: Column[str] = Column(String(200), nullable = False)
 
-    # Relacion inversa entre region y comuna: Una región puede tener asociada multiples comunas
+    # Relación inversa entre region y comuna: Una región puede tener asociada multiples comunas
     comunas = relationship("Comuna", back_populates = "region")  # pyright: ignore[reportUnannotatedClassAttribute]
 
-    # Metodo para imprimir y debugear
+    # Método para imprimir y hacer debug
     @override
     def __repr__(self) -> str:
         return f"<Region(id={self.id}, nombre='{self.nombre}')>"
@@ -67,7 +67,7 @@ class Comuna(Base):  # pyright: ignore[reportAny]
     # Relación inversa entre Comuna y AvisoAdopcion: Una comuna puede estar asociada a multiples avisos
     avisos = relationship("AvisoAdopcion", back_populates = "comuna")  # pyright: ignore[reportUnannotatedClassAttribute]
 
-    # Metodo para imprimir y debugear
+    # Método para imprimir y hacer debug.
     @override
     def __repr__(self):
         return f"<Comuna(id={self.id}, nombre='{self.nombre}')>"
@@ -95,7 +95,7 @@ class AvisoAdopcion(Base):  # pyright: ignore[reportAny]
     # Llave foránea a Comuna
     comuna_id: Column[int] = Column(Integer, ForeignKey('comuna.id'), nullable = False, index = True)
 
-    # Relación entre AvisoAdopcion y Comuna: Un aviso de adopcion esta asociado exactamente a una comuna
+    # Relación entre AvisoAdopcion y Comuna: Un aviso de adopción está asociado exactamente a una comuna
     comuna = relationship("Comuna", back_populates = "avisos")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     # Relación inversa entre AvisoAdopcion y Foto: Un aviso puede estar asociado a multiples fotos
@@ -104,7 +104,7 @@ class AvisoAdopcion(Base):  # pyright: ignore[reportAny]
     # Relación inversa entre AvisoAdopcion y ContactarPor: Un aviso puede estar asociado a multiples contactos
     contactos = relationship("ContactarPor", back_populates = "aviso")  # pyright: ignore[reportUnannotatedClassAttribute]
 
-    # Método para imprimir y debugear
+    # Método para imprimir y hacer debug.
     @override
     def __repr__(self) -> str:
         return f"<AvisoAdopcion(id={self.id}, nombre='{self.nombre}', tipo='{self.tipo}')>"
@@ -114,7 +114,7 @@ class Foto(Base):  # pyright: ignore[reportAny]
     __tablename__: str = 'foto'
 
     # Llave primaria
-    # (aviso_id es tambien llave foránea a AvisoAdopcion)
+    # (aviso_id es también llave foránea a AvisoAdopcion)
     id: Column[int] = Column(Integer, primary_key = True, autoincrement = True)
     aviso_id: Column[int] = Column(Integer, ForeignKey('aviso_adopcion.id'), primary_key = True, index = True)
 
@@ -122,10 +122,10 @@ class Foto(Base):  # pyright: ignore[reportAny]
     ruta_archivo: Column[str] = Column(String(300), nullable = False)
     nombre_archivo: Column[str] = Column(String(300), nullable = False)
 
-    # Relación entre Foto y AvisoAdopcion: Una foto esta asociada exactamente a un aviso
+    # Relación entre Foto y AvisoAdopcion: Una foto está asociada exactamente a un aviso
     aviso = relationship("AvisoAdopcion", back_populates = "fotos")  # pyright: ignore[reportUnannotatedClassAttribute]
 
-    # Método para imprimir y debugear
+    # Método para imprimir y hacer debug.
     @override
     def __repr__(self) -> str:
         return f"<Foto(id={self.id}, nombre_archivo='{self.nombre_archivo}')>"
@@ -135,7 +135,7 @@ class ContactarPor(Base):  # pyright: ignore[reportAny]
     __tablename__: str = 'contactar_por'
 
     # Llave primaria
-    # (aviso_id es tambien llave foránea a AvisoAdopcion)
+    # (aviso_id es también llave foránea a AvisoAdopcion)
     id: Column[int] = Column(Integer, primary_key = True, autoincrement = True)
     aviso_id: Column[int] = Column(Integer, ForeignKey('aviso_adopcion.id'), primary_key = True, index = True)
 
@@ -143,10 +143,10 @@ class ContactarPor(Base):  # pyright: ignore[reportAny]
     nombre: Column[str] = Column(Enum('whatsapp', 'telegram', 'X', 'instagram', 'tiktok', 'otra'), nullable = False)
     identificador: Column[str] = Column(String(150), nullable = False)
 
-    # Relación entre ContactarPor y AvisoAdopcion: Un contacto esta asociado exactamente a un aviso
+    # Relación entre ContactarPor y AvisoAdopcion: Un contacto está asociado exactamente a un aviso
     aviso = relationship("AvisoAdopcion", back_populates = "contactos")  # pyright: ignore[reportUnannotatedClassAttribute]
 
-    # Método para imprimir y debugear
+    # Método para imprimir y hacer debug.
     @override
     def __repr__(self) -> str:
         return f"<ContactarPor(id={self.id}, nombre='{self.nombre}', identificador='{self.identificador}')>"
@@ -176,7 +176,7 @@ def obtener_aviso_por_id(id: int) -> AvisoAdopcion | None:
     return aviso
 
 def obtener_avisos_por_pagina(pagina_idx: int, avisos_por_pagina: int) -> tuple[list[AvisoAdopcion], int]:
-    """Obtiene una lista paginada de avisos y el total de avisos obtenidos en dicha pagina"""
+    """Obtiene una lista paginada de avisos y el total de avisos obtenidos en dicha página"""
 
     with SessionLocal() as session:
         # Calculamos offset
@@ -192,7 +192,7 @@ def obtener_avisos_por_pagina(pagina_idx: int, avisos_por_pagina: int) -> tuple[
         # Obtenemos el total de avisos antes de paginar
         items_totales = session.query(func.count(AvisoAdopcion.id)).scalar()  # pyright: ignore[reportAny]
 
-        # Se aplica limite y offset para obtener solo pagina actual
+        # Se aplica límite y offset para obtener solo página actual
         avisos_paginados: list[AvisoAdopcion] = query.limit(avisos_por_pagina).offset(offset).all()
 
         return avisos_paginados, items_totales
