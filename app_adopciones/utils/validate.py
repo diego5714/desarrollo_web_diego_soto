@@ -9,7 +9,7 @@ from database.db import Comuna, SessionLocal
 
 def validar_region_comuna(region: str | None, comuna: str | None) -> bool:
     """
-    Valida si la region es valida, y si la comuna pertenece a la region 
+    Verifica si la region es válida, y si la comuna pertenece a la región
     mediante la base de datos
 
     Args:
@@ -37,13 +37,13 @@ def validar_region_comuna(region: str | None, comuna: str | None) -> bool:
         return resultado is not None
     
     except (ValueError, TypeError):
-        # Si hubo algun error al convertir los strings a enteros 
-        # la validacion falla
+        # Si hubo algún error al convertir los strings a enteros
+        # la validación falla
         session.close()
         return False
 
 def validar_sector(sector: str | None) -> bool:
-    """Valida que el sector, si es que se proporciona, no exceda los 100 caracteres"""
+    """Válida que el sector, si es que se proporciona, no exceda los 100 caracteres"""
     
     if sector and len(sector.strip()) > 100:
         return False
@@ -51,7 +51,7 @@ def validar_sector(sector: str | None) -> bool:
     return True
 
 def validar_nombre(nombre: str | None) -> bool:
-    """Valida que el nombre tenga entre 3 y 200 caracteres"""
+    """Válida que el nombre tenga entre 3 y 200 caracteres"""
     
     if not nombre or not (3 <= len(nombre.strip()) <= 200):
         return False
@@ -59,7 +59,7 @@ def validar_nombre(nombre: str | None) -> bool:
     return True
 
 def validar_email(email: str | None) -> bool:
-    """Valida que el email tenga un formato y longitud validos"""
+    """Verifica que el email tenga un formato y longitud válidos"""
 
     if not email or len(email.strip()) > 100:
         return False
@@ -73,7 +73,7 @@ def validar_email(email: str | None) -> bool:
     return True
 
 def validar_telefono(telefono: str | None) -> bool:
-    """Valida que el telefono, si se proporciona, tenga un formato valido"""
+    """Verifica que el teléfono, si se proporciona, tenga un formato válido"""
 
     if not telefono:
         return True
@@ -87,7 +87,7 @@ def validar_telefono(telefono: str | None) -> bool:
     return True
 
 def validar_tipo(tipo: str | None) -> bool:
-    """Valida que el tipo de mascota sea 'Perro' o 'Gato'"""
+    """Válida que el tipo de mascota sea 'Perro' o 'Gato'"""
 
     if not tipo or tipo not in ['Perro', 'Gato']:
         return False
@@ -95,26 +95,26 @@ def validar_tipo(tipo: str | None) -> bool:
     return True
 
 def validar_entero_positivo(valor_str: str | None) -> bool:
-    """Valida que un string se pueda convertir a un entero mayor que cero"""
+    """Válida que un string se pueda convertir a un entero mayor que cero"""
 
     if not valor_str:
         return False
 
     try:
-        # Intentamos convertr a entero
+        # Intentamos convertir a entero
         valor_int: int = int(valor_str)
 
         if valor_int <= 0:
             return False
         
     except (ValueError, TypeError):
-        # Si hubo algun problema al convertir a entero, devolvemos False
+        # Si hubo algún problema al convertir a entero, devolvemos False
         return False
 
     return True
 
 def validar_unidad(unidad: str | None) -> bool:
-    """Valida que la unidad recibida sea 'Meses' o 'Años'"""
+    """Válida que la unidad recibida sea 'Meses' o 'Años'"""
 
     if not unidad or unidad not in ['Meses', 'Años']:
         return False
@@ -122,7 +122,7 @@ def validar_unidad(unidad: str | None) -> bool:
     return True
 
 def validar_datetime_futuro(datetime_str: str | None) -> bool:
-    """Valida que el datetime sea como minimo 3 horas en el futuro, con un margen de 15 minutos"""
+    """Válida que el datetime sea como minimo 3 horas en el futuro, con un margen de 15 minutos"""
 
     if not datetime_str:
         return False
@@ -131,11 +131,11 @@ def validar_datetime_futuro(datetime_str: str | None) -> bool:
         # Intentamos convertir el string a un objeto datetime
         datetime_usuario: datetime = datetime.fromisoformat(datetime_str)
 
-        # Calculamos el limite estricto de fecha y hora
+        # Calculamos el límite estricto de fecha y hora
         datetime_minimo_estricto: datetime = datetime.now() + timedelta(hours = 3)
 
         # Restamos un margen de tolerancia para permitirles a los usuarios demorarse
-        # a lo mas 15 minutos al enviar el formulario
+        # a lo más 15 minutos al enviar el formulario
         margen_tolerancia: timedelta = timedelta(minutes = 15)
         datetime_minimo_real: datetime = datetime_minimo_estricto - margen_tolerancia
 
@@ -143,13 +143,13 @@ def validar_datetime_futuro(datetime_str: str | None) -> bool:
             return False
 
     except (ValueError, TypeError):
-        # Si hubo algun error al convertir a datetime, retornamos False
+        # Si hubo algún error al convertir a datetime, retornamos False
         return False
 
     return True
 
 def validar_contactos(contactos: list[str | None]) -> bool:
-    """Valida una lista de identificadores de redes sociales, si es que existe"""
+    """Válida una lista de identificadores de redes sociales, si es que existe"""
 
     if not contactos:
         return True
@@ -158,7 +158,7 @@ def validar_contactos(contactos: list[str | None]) -> bool:
         return False
 
     for contacto in contactos:
-        # Validamos que cada identificador tenga un largo valido
+        # Validamos que cada identificador tenga un largo válido
         if contacto:
             if not (4 <= len(contacto.strip()) <= 50):
                 return False
@@ -190,19 +190,19 @@ def validar_archivos(archivos: list[FileStorage]) -> bool:
 
 def validar_formulario(request: Request) -> tuple[bool, list[str], dict[Any, Any]]:  # pyright: ignore[reportExplicitAny]
     """
-    Valida la informacion recibida en el formulario del request
+    Válida la información recibida en el formulario del request
 
     Args: 
         request (Request): El objeto request recibido en la ruta de flask
 
     Returns:
-        bool: True si la validacion fue exitosa, False en caso contrario
+        bool: True si la validación fue exitosa, False en caso contrario
 
     """
 
     # Obtenemos los datos del formulario
 
-    # Ubicacion
+    # Ubicación
     region: str | None = request.form.get('region')
     comuna: str | None = request.form.get('comuna')
     sector: str | None = request.form.get('sector')
@@ -239,7 +239,7 @@ def validar_formulario(request: Request) -> tuple[bool, list[str], dict[Any, Any
 
     fotos_subidas: list[FileStorage] = request.files.getlist('fotos')
 
-    # Hacemos validacion de datos
+    # Hacemos validación de datos
 
     msg: list[str] = []
     valido: bool = True
