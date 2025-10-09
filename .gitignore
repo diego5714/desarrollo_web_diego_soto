@@ -7,3 +7,4 @@ app_adopciones/static/uploads/*.jpeg
 app_adopciones/static/uploads/*.png
 app_adopciones/static/uploads/*.gif
 app_adopciones/static/uploads/*.webp
+.idea/
