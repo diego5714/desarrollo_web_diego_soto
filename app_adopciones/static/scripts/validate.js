@@ -40,7 +40,7 @@ const validarEmail = (email) => {
 
 const validarTelefono = (telefono) => {
     if (telefono){
-        let largoValido = telefono.length == 13;
+        let largoValido = telefono.length === 13;
 
         // Se valida formato con regex
         let regex = /^\+\d{3}\.\d{8}$/;
@@ -59,7 +59,7 @@ const validarContacto = (contacto) => {
 }
 
 const validarContactos = (contactos) => {
-    if (contactos.length != 0){
+    if (contactos.length !== 0){
         if (contactos.length > 6) return false;
         
         for (const contacto of contactos){
@@ -77,23 +77,37 @@ const validarTipo = (tipo) => {
     if (!tipo) return false;
 
     let tipos = ["Perro", "Gato"];
-    if (!(tipos.includes(tipo))) return false;
+    return tipos.includes(tipo);
     
-    return true;
+
 }
 
 const validarUnidad = (unidad) => {
     if (!unidad) return false;
 
     let unidades = ["Meses", "Años"];
-    if (!(unidades.includes(unidad))) return false;
+    return unidades.includes(unidad);
     
-    return true;
+
 }
 
 const validarEntero = (cantidad) => {
     if (!cantidad) return false;
-    let cantidadValida = cantidad > 0;
+
+    // Convertimos cantidad a un numero
+    const cantidadNum = Number(cantidad);
+
+    // Chequeamos si la conversion salio bien
+    if (isNaN(cantidadNum)) {
+        return false;
+    }
+
+    // Chequeamos si el numero es entero
+    if (!Number.isInteger(cantidadNum)) {
+        return false;
+    }
+
+    const cantidadValida = cantidadNum > 0;
 
     return cantidadValida;
 }
@@ -104,9 +118,9 @@ const validarDateTime = (datetime_string) => {
     //Chequeamos si la fecha era válida
     if (isNaN(dateTimeUsuario)) return false;
 
-    if (dateTimeUsuario < dateTimeMinimo) return false
+    return dateTimeUsuario >= dateTimeMinimo;
 
-    return true;
+
 }
 
 const validarArchivos = (archivos) => {
@@ -117,7 +131,7 @@ const validarArchivos = (archivos) => {
     let tipoValido = true;
     for (const archivo of archivos){
         let fileFamily = archivo.type.split("/")[0];
-        tipoValido &&= fileFamily == "image";
+        tipoValido &&= fileFamily === "image";
     }
 
     return largoValido && tipoValido
@@ -251,7 +265,7 @@ const validateForm = () => {
         submitButton.addEventListener("click", () => {
             Formulario.submit();
             confirmationBox.hidden = true;
-            mostrarPantallaExito();
+            //mostrarPantallaExito();
         });
 
         let backButton = document.createElement("button");
