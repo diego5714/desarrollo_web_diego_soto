@@ -20,7 +20,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Rutas de la aplicación ###################################################
 @app.route('/')
 def index() -> str:
-    # Obtenemos los ultimos 5 avisos por fecha de publicacion
+    # Obtenemos los últimos 5 avisos por fecha de publicación
     avisos: list[AvisoAdopcion] = obtener_avisos(5)
     
     return render_template('index.html', avisos=avisos)
@@ -33,7 +33,7 @@ def publication_form() -> str:
         validacion, errores, datos = validate.validar_formulario(request)
 
         if not validacion:
-            # Hubo un error al validar la informacion del formulario
+            # Hubo un error al validar la información del formulario
             # Mostramos mensajes de error en la plantilla
 
             return render_template('form.html', errores=errores, form_data=request.form)
@@ -123,21 +123,21 @@ def publication_form() -> str:
 
 @app.route('/publications')
 def publication_list() -> str:
-    # Obtenemos el numero de pagina desde la url, si no se especifica 
+    # Obtenemos el número de página desde la url, si no se especifica
     # es por defecto 1
-    pagina: int = request.args.get('page', 1, type = int)
+    pagina: int = request.args.get('pagina', 1, type = int)
     avisos_por_pagina = 5
 
     avisos, items_totales = obtener_avisos_por_pagina(pagina, avisos_por_pagina)
 
-    # Calculamos el total de paginas
+    # Calculamos el total de páginas
     paginas_totales: int = math.ceil(items_totales / avisos_por_pagina)
 
     return render_template('publication_list.html', avisos = avisos, pagina = pagina, paginas_totales = paginas_totales)
 
 @app.route('/publication/<int:id>')
 def publication(id: int) -> str:
-    # Obtenemos el aviso asociado al id
+    # Obtenemos el aviso asociado al ID
 
     aviso: AvisoAdopcion = obtener_aviso_por_id(id)
     
@@ -145,7 +145,7 @@ def publication(id: int) -> str:
 
 @app.route('/image/<int:aviso_id>/<int:foto_id>')
 def image(aviso_id: int, foto_id: int) -> str:
-    # Obtenemos la foto en base al id de aviso y de foto
+    # Obtenemos la foto basándonos en el ID del aviso y de la foto
 
     foto: Foto = obtener_foto_por_ids(aviso_id, foto_id)
     
