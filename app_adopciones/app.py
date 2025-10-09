@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
 from sqlalchemy.orm import Session
+from werkzeug import Response
 from werkzeug.utils import secure_filename
 from database.db import AvisoAdopcion, Foto, ContactarPor, SessionLocal, obtener_aviso_por_id, obtener_avisos, obtener_avisos_por_pagina, obtener_foto_por_ids
 from utils import validate
@@ -26,7 +27,7 @@ def index() -> str:
     return render_template('index.html', avisos=avisos)
 
 @app.route('/form', methods=["GET", "POST"])
-def publication_form() -> str:
+def publication_form() -> str | Response:
     if request.method == "POST":
         # Request POST
 
