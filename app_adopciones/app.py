@@ -107,7 +107,7 @@ def publication_form() -> str | Response:
             session.commit()
 
             #flash("Aviso creado exitosamente", "success")
-            return redirect(url_for('index'))  # pyright: ignore[reportReturnType]
+            return redirect(url_for('index'))
         
         except Exception as e:
             # Algo fallo, deshacemos cualquier cambio que se haya hecho
