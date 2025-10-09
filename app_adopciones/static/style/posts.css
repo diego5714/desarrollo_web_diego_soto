@@ -73,14 +73,4 @@
     white-space: normal;
 }
 
-.like-container {
-    align-self: end;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 20px;
-    white-space: nowrap;
-}
-
 

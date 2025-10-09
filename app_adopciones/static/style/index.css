@@ -12,15 +12,6 @@
     width: 70vw;
 }
 
-.sticky-col {
-    top: 52px;
-    position: sticky;
-    align-self: start;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 .no-posts {
     text-align: center;
     border: 1px solid #ddd;
@@ -29,54 +20,6 @@
     background-color: #f9f9f9;
 }
 
-.new-post,
-.prompt-register,
-.page-links {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 20px;
-    max-width: 30vw;
-}
-
-
-.prompt-register {
-    min-height: 30vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.page-links {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-
-.tabs {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.tab {
-    flex-grow: 1;
-    padding: 5px 10px;
-    text-align: center;
-    border-radius: 4px;
-    background-color: #d2deec;
-}
-
-.tab:hover {
-    background-color: #e3f0ff;
-}
-
-.tab.current {
-    border-bottom: none;
-    background-color: #f9f9f9;
-}
 
 form p {
     margin: 0.5em 0;

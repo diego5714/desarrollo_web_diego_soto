@@ -52,26 +52,6 @@ body {
     margin-right: 1em;
 }
 
-.navbar-user {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-}
-
-.navbar-avatar {
-    height: 30px;
-    width: 30px;
-    object-fit: contain;
-    border-radius: 4px;
-}
-
-.navbar-user-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    text-decoration: none;
-}
-
 main a {
     color: #0079d3;
 }
