@@ -22,12 +22,23 @@
         <form name="formulario" class="form-divider" method="post" enctype="multipart/form-data">
             <div class="form-left">
                 
-                <div id="val-box" hidden>
-                    <h2 id="val-msg"></h2>
-                    <ul id="val-list"></ul>
+                <div id="val-box" {% if not errores %}hidden{% endif %}>
+                    
+                    <h2 id="val-msg">
+                        {% if errores %}
+                            Los siguientes campos son inválidos
+                        {% endif %}
+                    </h2>
+                    <ul id="val-list">
+                        {% if errores %}
+                            {% for error in errores %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
                 </div>
 
-                <h2>Donde?</h2>
+                <h2>¿Dónde?</h2>
                 
                 <label for="region">Región:</label>
                 <select id="region" name="region">
