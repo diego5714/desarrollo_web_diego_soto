@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from database.db import Comuna, SessionLocal
 
+
 def validar_region_comuna(region: str | None, comuna: str | None) -> bool:
     """
     Verifica si la region es válida, y si la comuna pertenece a la región
@@ -19,7 +20,7 @@ def validar_region_comuna(region: str | None, comuna: str | None) -> bool:
     Returns:
         bool: True si la combinación es válida, False en caso contrario
     """
-    
+
     session: Session = SessionLocal()
 
     try:
@@ -28,35 +29,46 @@ def validar_region_comuna(region: str | None, comuna: str | None) -> bool:
         comuna_id: int = int(comuna)  # pyright: ignore[reportArgumentType]
 
         # Hacemos consulta a la base de datos
-        resultado: Comuna | None = session.query(Comuna).filter_by(
-            id = comuna_id,
-            region_id = region_id
-        ).first()
+        resultado: Comuna | None = (
+            session.query(Comuna).filter_by(id=comuna_id, region_id=region_id).first()
+        )
 
         session.close()
         return resultado is not None
-    
+
     except (ValueError, TypeError):
         # Si hubo algún error al convertir los strings a enteros
         # la validación falla
         session.close()
         return False
 
+
 def validar_sector(sector: str | None) -> bool:
     """Válida que el sector, si es que se proporciona, no exceda los 100 caracteres"""
-    
+
     if sector and len(sector.strip()) > 100:
         return False
-    
+
     return True
 
-def validar_nombre(nombre: str | None) -> bool:
-    """Válida que el nombre tenga entre 3 y 200 caracteres"""
-    
-    if not nombre or not (3 <= len(nombre.strip()) <= 200):
+
+def validar_nombre(nombre: str | None, largo_minimo: int, largo_maximo: int) -> bool:
+    """Válida que el nombre tenga entre largo_minimo y largo_maximo caracteres"""
+
+    if not nombre or not (largo_minimo <= len(nombre.strip()) <= largo_maximo):
         return False
-    
+
     return True
+
+
+def validar_mensaje(mensaje: str | None, largo_minimo: int, largo_maximo: int) -> bool:
+    """Válida que el mensaje de texto tenga entre largo_minimo y largo_maximo caracteres"""
+
+    if not mensaje or not (largo_minimo <= len(mensaje.strip()) <= largo_maximo):
+        return False
+
+    return True
+
 
 def validar_email(email: str | None) -> bool:
     """Verifica que el email tenga un formato y longitud válidos"""
@@ -65,12 +77,13 @@ def validar_email(email: str | None) -> bool:
         return False
 
     # Validamos con regex
-    regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
     if not re.match(regex, email.strip()):
         return False
 
     return True
+
 
 def validar_telefono(telefono: str | None) -> bool:
     """Verifica que el teléfono, si se proporciona, tenga un formato válido"""
@@ -79,20 +92,22 @@ def validar_telefono(telefono: str | None) -> bool:
         return True
 
     # Validamos con regex
-    regex = r'^\+\d{3}\.\d{8}$'
+    regex = r"^\+\d{3}\.\d{8}$"
 
     if not re.match(regex, telefono.strip()):
         return False
 
     return True
 
+
 def validar_tipo(tipo: str | None) -> bool:
     """Válida que el tipo de mascota sea 'Perro' o 'Gato'"""
 
-    if not tipo or tipo not in ['Perro', 'Gato']:
+    if not tipo or tipo not in ["Perro", "Gato"]:
         return False
 
     return True
+
 
 def validar_entero_positivo(valor_str: str | None) -> bool:
     """Válida que un string se pueda convertir a un entero mayor que cero"""
@@ -106,20 +121,22 @@ def validar_entero_positivo(valor_str: str | None) -> bool:
 
         if valor_int <= 0:
             return False
-        
+
     except (ValueError, TypeError):
         # Si hubo algún problema al convertir a entero, devolvemos False
         return False
 
     return True
 
+
 def validar_unidad(unidad: str | None) -> bool:
     """Válida que la unidad recibida sea 'Meses' o 'Años'"""
 
-    if not unidad or unidad not in ['Meses', 'Años']:
+    if not unidad or unidad not in ["Meses", "Años"]:
         return False
 
     return True
+
 
 def validar_datetime_futuro(datetime_str: str | None) -> bool:
     """Válida que el datetime sea como minimo 3 horas en el futuro, con un margen de 15 minutos"""
@@ -132,11 +149,11 @@ def validar_datetime_futuro(datetime_str: str | None) -> bool:
         datetime_usuario: datetime = datetime.fromisoformat(datetime_str)
 
         # Calculamos el límite estricto de fecha y hora
-        datetime_minimo_estricto: datetime = datetime.now() + timedelta(hours = 3)
+        datetime_minimo_estricto: datetime = datetime.now() + timedelta(hours=3)
 
         # Restamos un margen de tolerancia para permitirles a los usuarios demorarse
         # a lo más 15 minutos al enviar el formulario
-        margen_tolerancia: timedelta = timedelta(minutes = 15)
+        margen_tolerancia: timedelta = timedelta(minutes=15)
         datetime_minimo_real: datetime = datetime_minimo_estricto - margen_tolerancia
 
         if datetime_usuario < datetime_minimo_real:
@@ -147,6 +164,7 @@ def validar_datetime_futuro(datetime_str: str | None) -> bool:
         return False
 
     return True
+
 
 def validar_contactos(contactos: list[str | None]) -> bool:
     """Válida una lista de identificadores de redes sociales, si es que existe"""
@@ -162,25 +180,26 @@ def validar_contactos(contactos: list[str | None]) -> bool:
         if contacto:
             if not (4 <= len(contacto.strip()) <= 50):
                 return False
-    
+
     return True
+
 
 def validar_archivos(archivos: list[FileStorage]) -> bool:
     ALLOWED_EXTENSIONS: set[str] = {"png", "jpg", "jpeg", "gif", "webp"}
     ALLOWED_MIMETYPES: set[str] = {"image/jpeg", "image/png", "image/gif", "image/webp"}
-    
+
     if not (1 <= len(archivos) <= 5):
         return False
 
     # Verificamos que no haya archivos vacios
-    if len(archivos) == 1 and archivos[0].filename == '':
+    if len(archivos) == 1 and archivos[0].filename == "":
         return False
 
     for archivo in archivos:
         # Validamos el tipo de archivo
         ftype_guess = filetype.guess(archivo)  # pyright: ignore[reportUnknownMemberType]
 
-        if ftype_guess.extension not in ALLOWED_EXTENSIONS:    # pyright: ignore[reportOptionalMemberAccess]
+        if ftype_guess.extension not in ALLOWED_EXTENSIONS:  # pyright: ignore[reportOptionalMemberAccess]
             return False
 
         if ftype_guess.mime not in ALLOWED_MIMETYPES:  # pyright: ignore[reportOptionalMemberAccess]
@@ -188,37 +207,52 @@ def validar_archivos(archivos: list[FileStorage]) -> bool:
 
     return True
 
-def validar_formulario(request: Request) -> tuple[bool, list[str], dict[Any, Any]]:  # pyright: ignore[reportExplicitAny]
-    """
-    Válida la información recibida en el formulario del request
 
-    Args: 
+def validar_formulario_publicacion(
+    request: Request,
+) -> tuple[
+    bool,
+    list[str],
+    dict[str, str | None],
+    dict[str, int],
+    list[FileStorage],
+    datetime,
+]:
+    """
+    Válida la información recibida en el formulario del request para una publicación nueva.
+
+    Args:
         request (Request): El objeto request recibido en la ruta de flask
 
     Returns:
         bool: True si la validación fue exitosa, False en caso contrario
+        errores: Una lista con los errores de validación encontrados
+        datos_str: Un diccionario con los datos basados en texto parseados del formulario
+        datos_int: Un diccionario con los datos basados en números parseados del formulario
+        fotos_subidas: Una lista de los archivos de fotos enviados en el formulario
+        fecha_entrega: La fecha de entrega de la publicación
 
     """
 
     # Obtenemos los datos del formulario
 
     # Ubicación
-    region: str | None = request.form.get('region')
-    comuna: str | None = request.form.get('comuna')
-    sector: str | None = request.form.get('sector')
-    
+    region: str | None = request.form.get("region")
+    comuna: str | None = request.form.get("comuna")
+    sector: str | None = request.form.get("sector")
+
     # Contacto
-    nombre: str | None = request.form.get('nombre')
-    email: str | None = request.form.get('email')
-    telefono: str | None = request.form.get('telefono')
+    nombre: str | None = request.form.get("nombre")
+    email: str | None = request.form.get("email")
+    telefono: str | None = request.form.get("telefono")
 
     # Redes sociales
-    whatsapp_id: str | None = request.form.get('whatsapp-input')
-    telegram_id: str | None = request.form.get('telegram-input')
-    twitter_id: str | None = request.form.get('twitter-input')
-    instagram_id: str | None = request.form.get('instagram-input')
-    tiktok_id: str | None = request.form.get('tiktok-input')
-    otro_id: str | None = request.form.get('other-input')
+    whatsapp_id: str | None = request.form.get("whatsapp-input")
+    telegram_id: str | None = request.form.get("telegram-input")
+    twitter_id: str | None = request.form.get("twitter-input")
+    instagram_id: str | None = request.form.get("instagram-input")
+    tiktok_id: str | None = request.form.get("tiktok-input")
+    otro_id: str | None = request.form.get("other-input")
 
     contactos: list[str | None] = []
 
@@ -230,14 +264,17 @@ def validar_formulario(request: Request) -> tuple[bool, list[str], dict[Any, Any
     contactos.append(otro_id)
 
     # Datos mascota
-    tipo_mascota: str | None = request.form.get('tipo')
-    cantidad: str | None = request.form.get('cantidad')
-    edad: str | None = request.form.get('edad')
-    unidad_edad: str | None = request.form.get('unidad')
-    fecha_entrega: str | None = request.form.get('fecha')    # String con la fecha, ej: '2025-10-04T21:30'
-    descripcion: str | None = request.form.get('descripcion') 
+    tipo_mascota: str | None = request.form.get("tipo")
+    cantidad: str | None = request.form.get("cantidad")
+    edad: str | None = request.form.get("edad")
+    unidad_edad: str | None = request.form.get("unidad")
+    fecha_entrega: str | None = request.form.get(
+        "fecha"
+    )  # String con la fecha, ej: '2025-10-04T21:30'
 
-    fotos_subidas: list[FileStorage] = request.files.getlist('fotos')
+    descripcion: str | None = request.form.get("descripcion")
+
+    fotos_subidas: list[FileStorage] = request.files.getlist("fotos")
 
     # Hacemos validación de datos
 
@@ -252,7 +289,7 @@ def validar_formulario(request: Request) -> tuple[bool, list[str], dict[Any, Any
         msg.append("El sector ingresado no es válido")
         valido = False
 
-    if not validar_nombre(nombre):
+    if not validar_nombre(nombre, 3, 200):
         msg.append("El nombre ingresado no es válido")
         valido = False
 
@@ -279,13 +316,15 @@ def validar_formulario(request: Request) -> tuple[bool, list[str], dict[Any, Any
     if not validar_entero_positivo(edad):
         msg.append("La edad ingresada no es válida")
         valido = False
-    
+
     if not validar_unidad(unidad_edad):
         msg.append("La unidad de la edad no es válida")
         valido = False
 
     if not validar_datetime_futuro(fecha_entrega):
-        msg.append("La fecha de entrega no es válida, debe ser al menos 3 horas en el futuro")
+        msg.append(
+            "La fecha de entrega no es válida, debe ser al menos 3 horas en el futuro"
+        )
         valido = False
 
     if not validar_archivos(fotos_subidas):
@@ -293,27 +332,72 @@ def validar_formulario(request: Request) -> tuple[bool, list[str], dict[Any, Any
         valido = False
 
     # Almacenamos los datos convertidos en un diccionario
-    datos: dict[Any, Any] = {}  # pyright: ignore[reportExplicitAny]
+    datos_str: dict[str, str | None] = {}
+    datos_int: dict[str, int] = {}
+    fecha: datetime
 
     if valido:
-        datos["region_id"] = int(region)  # pyright: ignore[reportArgumentType]
-        datos["comuna_id"] = int(comuna)  # pyright: ignore[reportArgumentType]
-        datos["sector"] = str(sector).strip() or None
-        datos["nombre"] = str(nombre).strip()
-        datos["email"] = str(email).strip()
-        datos["telefono"] = str(telefono).strip() or None
-        datos["whatsapp_id"] = str(whatsapp_id).strip() or None
-        datos["telegram_id"] = str(telegram_id).strip() or None
-        datos["twitter_id"] = str(twitter_id).strip() or None
-        datos["instagram_id"] = str(instagram_id).strip() or None
-        datos["tiktok_id"] = str(tiktok_id).strip() or None
-        datos["otro_id"] = str(otro_id).strip() or None
-        datos["tipo_mascota"] = str(tipo_mascota).lower()
-        datos["cantidad"] = int(cantidad)  # pyright: ignore[reportArgumentType]
-        datos["edad"] = int(edad)   # pyright: ignore[reportArgumentType]
-        datos["unidad_edad"] = 'm' if unidad_edad == 'Meses' else 'a'
-        datos["fecha_entrega"] = datetime.fromisoformat(fecha_entrega)  # pyright: ignore[reportArgumentType]
-        datos["descripcion"] = str(descripcion).strip() or None
-        datos["fotos_subidas"] = fotos_subidas
+        datos_int["region_id"] = int(region)
+        datos_int["comuna_id"] = int(comuna)
+        datos_str["sector"] = str(sector).strip() or None
+        datos_str["nombre"] = str(nombre).strip()
+        datos_str["email"] = str(email).strip()
+        datos_str["telefono"] = str(telefono).strip() or None
+        datos_str["whatsapp_id"] = str(whatsapp_id).strip() or None
+        datos_str["telegram_id"] = str(telegram_id).strip() or None
+        datos_str["twitter_id"] = str(twitter_id).strip() or None
+        datos_str["instagram_id"] = str(instagram_id).strip() or None
+        datos_str["tiktok_id"] = str(tiktok_id).strip() or None
+        datos_str["otro_id"] = str(otro_id).strip() or None
+        datos_str["tipo_mascota"] = str(tipo_mascota).lower()
+        datos_int["cantidad"] = int(cantidad)
+        datos_int["edad"] = int(edad)
+        datos_str["unidad_edad"] = "m" if unidad_edad == "Meses" else "a"
+        datos_str["descripcion"] = str(descripcion).strip() or None
+        fecha = datetime.fromisoformat(fecha_entrega)
+
+    return (valido, msg, datos_str, datos_int, fotos_subidas, fecha)
+
+
+def validar_formulario_comentario(
+    request: Request,
+) -> tuple[bool, list[str], dict[str, str]]:
+    """
+    Válida la información recibida en el formulario del request para un nuevo comentario
+
+    Args:
+        request (Request): El objeto request recibido en la ruta de flask
+
+    Returns:
+        bool: True si la validación fue exitosa, False en caso contrario
+        datos: Un diccionario con los datos parseados del formulario
+
+    """
+
+    # Obtenemos los datos del formulario
+    nombre: str | None = request.form.get("nombre")
+    comentario: str | None = request.form.get("comentario")
+
+    # Hacemos validación de datos
+    msg: list[str] = []
+    valido: bool = True
+
+    if not validar_nombre(nombre, 3, 80):
+        msg.append(
+            "El nombre ingresado no es válido. (Debe tener entre 3 y 80 caracteres)"
+        )
+        valido = False
+
+    if not validar_mensaje(comentario, 5, 300):
+        msg.append(
+            "El mensaje ingresado no es válido. Debe tener entre 5 y 300 caracteres."
+        )
+        valido = False
+
+    # Almacenamos los datos procesados en un diccionario
+    datos: dict[str, str] = {}
+
+    datos["nombre"] = str(nombre).strip()
+    datos["comentario"] = str(comentario).strip()
 
     return (valido, msg, datos)
