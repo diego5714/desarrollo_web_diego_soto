@@ -1,5 +1,4 @@
 import re
-from typing import Any
 from filetype import filetype  # pyright: ignore[reportMissingTypeStubs]
 from flask import Request
 from werkzeug.datastructures.file_storage import FileStorage
