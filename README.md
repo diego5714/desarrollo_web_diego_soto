@@ -1,4 +1,4 @@
-# desarrollo_web_diego_soto
+# Diego Soto: Desarrollo de Aplicaciones Web
 Repositorio para las tareas del ramo CC5002 Desarrollo de Aplicaciones Web (FCFM UChile)
 
 ## Descripción:
@@ -30,8 +30,8 @@ Repositorio para las tareas del ramo CC5002 Desarrollo de Aplicaciones Web (FCFM
 
     5. Asegurarse de que se tiene corriendo el servidor de MySQL y que es posible conectarse a él con las siguientes configuraciones
         - host: localhost
-        - puerto: 3306 
-        - username: root 
+        - puerto: 3306
+        - username: root
         - password: [Contraseña usada para crear el servidor]
 
     6. Una vez hecho lo anterior, ejecutar el siguiente comando para entrar en la consola de MySQL:
@@ -44,8 +44,9 @@ Repositorio para las tareas del ramo CC5002 Desarrollo de Aplicaciones Web (FCFM
             source database/create_user.sql;
             source database/tarea2.sql;
             source database/region_comuna.sql;
+            source database/tabla-comentario.sql;
             source database/grant_user_permissions.sql
-        ``` 
+        ```
 
     8. Salir de la consola de MySQL:
         ```bash
@@ -56,5 +57,5 @@ Repositorio para las tareas del ramo CC5002 Desarrollo de Aplicaciones Web (FCFM
         ```bash
             flask run
         ```
-    
+
     - La app estará disponible en: http://127.0.0.1:5000
