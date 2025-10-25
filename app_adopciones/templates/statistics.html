@@ -7,13 +7,23 @@
 {% endblock %}
 
 {% block content %}
-    <div class="statistics-container">
-        <img src="{{ url_for('static', filename='images/data/adopciones-dias.png') }}" alt="Publicaciones de adopción segun los dias">
-        <img src="{{ url_for('static', filename='images/data/porcentaje-tipos.png') }}" alt="Porcentaje de publicaciones según el tipo de mascota">
-        <img src="{{ url_for('static', filename='images/data/barras-perros-gatos.png') }}" alt="Número de publicaciones según mes y tipo">
+    <div class="statistics-organizer">
+        <div class="statistics-container">
+            <div id="chart-container-daily" style="width:100%; height:400px;"></div>
+        </div>
+
+        <div class="statistics-container">
+            <div id="chart-container-proportion" style="width:100%; height:400px;"></div>
+        </div>
+
+        <div class="statistics-container">
+            <div id="chart-container-monthly" style="width:100%; height:400px;"></div>
+        </div>
     </div>
+
 {% endblock %}
 
 {% block scripts %}
-    {# Este template no usa scripts #}
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="{{ url_for('static', filename='scripts/stats.js') }}"></script>
 {% endblock %}

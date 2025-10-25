@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for, flash
+from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 from werkzeug import Response
 from werkzeug.utils import secure_filename
-from werkzeug.datastructures.file_storage import FileStorage
 
 from database.db import (
     AvisoAdopcion,
@@ -19,6 +19,7 @@ from database.db import (
 
 from utils import validate
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import hashlib
 import math
 import os
@@ -46,9 +47,18 @@ def publication_form() -> str | Response:
     if request.method == "POST":
         # Request POST
 
-        validacion, errores, datos_str, datos_int, fotos, fecha = (
-            validate.validar_formulario_publicacion(request)
-        )
+        try:
+            validacion, errores, datos_str, datos_int, fotos, fecha = (
+                validate.validar_formulario_publicacion(request)
+            )
+
+        except Exception as e:
+            print(f"Error al validar formulario: {e}")
+            return render_template(
+                "form.html",
+                errores=[f"Error al validar formulario: {e}"],
+                form_data=request.form,
+            )
 
         if not validacion:
             # Hubo un error al validar la información del formulario
@@ -237,3 +247,158 @@ def statistics() -> str:
     return render_template("statistics.html")
 
 
+# API Endpoints --------------------------------------------------------------------------------------------
+@app.route("/api/comments/<int:aviso_id>", methods=["GET"])
+def get_comment(aviso_id: int) -> Response:
+    """
+    Devuelve un JSON con los comentarios asociados a un aviso de adopción.
+    """
+
+    comentarios: list[Comentario] = obtener_comentarios_por_aviso(aviso_id)
+    comentarios_dict = [comentario.to_dict() for comentario in comentarios]
+
+    return jsonify(comentarios_dict)
+
+
+@app.route("/api/statistics/daily_publications", methods=["GET"])
+def get_daily_publications():
+    """
+    Devuelve un JSON con la cantidad de avisos de adopción
+    publicados por día, ordenados del más reciente al más antiguo.
+    """
+    try:
+        with SessionLocal() as session:
+            stats_query = (
+                session.query(
+                    # Seleccionamos la fecha (sin hora) y la etiquetamos como 'fecha'
+                    func.date(AvisoAdopcion.fecha_ingreso).label("fecha"),
+                    # Contamos los IDs y lo etiquetamos como 'cantidad'
+                    func.count(AvisoAdopcion.id).label("cantidad"),
+                )
+                .group_by(
+                    func.date(AvisoAdopcion.fecha_ingreso)
+                )  # Agrupamos por la fecha
+                .order_by(desc("fecha"))  # Ordenamos por la fecha (más nuevas primero)
+                .all()
+            )
+
+            # Convertimos el resultado en una lista de diccionarios para poder usar jsonify.
+            resultado = [
+                {"fecha": r.fecha.isoformat(), "cantidad": r.cantidad}
+                for r in stats_query
+            ]
+
+            return jsonify(resultado)
+
+    except Exception as e:
+        # Es una buena práctica manejar errores
+        print(f"Error al generar estadísticas: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
+
+
+@app.route("/api/statistics/pet_type_proportion", methods=["GET"])
+def get_type_proportion():
+    """
+    Devuelve un JSON con la proporción de animales por tipo de mascota.
+    """
+    try:
+        with SessionLocal() as session:
+            # Consulta para contar avisos agrupados por la columna 'tipo'
+            stats_query = (
+                session.query(
+                    AvisoAdopcion.tipo.label("tipo"),
+                    func.count(AvisoAdopcion.id).label("cantidad"),
+                )
+                .group_by(AvisoAdopcion.tipo)  # Agrupamos por la columna 'tipo'
+                .all()
+            )
+
+            # Calculamos el total de avisos
+            total_avisos = sum(r.cantidad for r in stats_query)
+
+            # Calculamos porcentajes
+            resultado = []
+            if total_avisos > 0:
+                resultado = [
+                    {
+                        "tipo": r.tipo,
+                        "porcentaje": round((r.cantidad / total_avisos) * 100, 2),
+                    }
+                    for r in stats_query
+                ]
+
+            return jsonify(resultado)
+
+    except Exception as e:
+        print(f"Error al generar estadísticas de tipo de mascota: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
+
+
+@app.route("/api/statistics/monthly_adoptions", methods=["GET"])
+def get_monthly_adoptions() -> Response:
+    """
+    Devuelve los puntos de datos de los últimos 12 meses (incluyendo el actual)
+    con la cantidad de adopciones de perros y gatos por separado.
+    """
+
+    try:
+        with SessionLocal() as session:
+            # Queremos los últimos 12 meses, incluyendo el mes actual.
+            today = datetime.now()
+
+            # Restamos 11 meses y vamos al primer día de ese mes
+            start_date = (today - relativedelta(months=11)).replace(
+                day=1, hour=0, minute=0, second=0, microsecond=0
+            )
+
+            # Esta consulta agrupa por mes (formato 'YYYY-MM') Y por tipo
+            query_results = (
+                session.query(
+                    # Usamos func.date_format para MySQL para obtener 'YYYY-MM'
+                    func.date_format(AvisoAdopcion.fecha_ingreso, "%Y-%m").label("mes"),
+                    AvisoAdopcion.tipo,
+                    func.count(AvisoAdopcion.id).label("cantidad"),
+                )
+                .filter(AvisoAdopcion.fecha_ingreso >= start_date)
+                .group_by("mes", AvisoAdopcion.tipo)
+                .order_by("mes")
+                .all()
+            )
+
+            # Generamos un diccionario de búsqueda con los resultados
+            datos_lookup = {f"{r.mes}_{r.tipo}": r.cantidad for r in query_results}
+
+            # Generamos las listas de datos y categorías para los 12 meses
+            categories = []
+            datos_gatos = []
+            datos_perros = []
+
+            current_month = start_date
+            for _ in range(12):
+                mes_str = current_month.strftime("%Y-%m")
+                categories.append(mes_str)
+
+                # Obtenemos la cantidad asociada al tipo de mascota, o 0 si no existe
+                key_gato = f"{mes_str}_gato"
+                datos_gatos.append(datos_lookup.get(key_gato, 0))
+
+                key_perro = f"{mes_str}_perro"
+                datos_perros.append(datos_lookup.get(key_perro, 0))
+
+                # Avanzamos al siguiente mes
+                current_month += relativedelta(months=1)
+
+            # Formateamos la respuesta final
+            resultado_final = {
+                "categories": categories,
+                "series": [
+                    {"name": "Gatos", "data": datos_gatos},
+                    {"name": "Perros", "data": datos_perros},
+                ],
+            }
+
+            return jsonify(resultado_final)
+
+    except Exception as e:
+        print(f"Error al generar estadísticas mensuales: {e}")
+        return jsonify({"error": "Error interno del servidor"}), 500
