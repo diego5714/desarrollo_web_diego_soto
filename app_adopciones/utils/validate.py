@@ -336,6 +336,19 @@ def validar_formulario_publicacion(
     datos_int: dict[str, int] = {}
     fecha: datetime
 
+    if (
+        not region
+        or not comuna
+        or not cantidad
+        or not edad
+        or not fecha_entrega
+        or not nombre
+        or not email
+        or not tipo_mascota
+        or not unidad_edad
+    ):
+        raise ValueError("Faltan datos obligatorios")
+
     if valido:
         datos_int["region_id"] = int(region)
         datos_int["comuna_id"] = int(comuna)
