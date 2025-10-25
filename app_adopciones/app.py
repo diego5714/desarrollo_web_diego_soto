@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, redirect, url_for, flash
+from flask import Flask, jsonify, request, render_template, redirect, url_for
 from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 from werkzeug import Response
@@ -134,13 +134,11 @@ def publication_form() -> str | Response:
             session.add(nuevo_aviso)
             session.commit()
 
-            # flash("Aviso creado exitosamente", "success")
             return redirect(url_for("index"))
 
         except Exception as e:
             # Algo fallo, deshacemos cualquier cambio que se haya hecho
             session.rollback()
-            # flash(f"Ocurrió un error al crear el aviso: {e}", "error")
 
             print(f"ERROR DURANTE LA INSERCIÓN: {e}")
 
@@ -291,7 +289,6 @@ def get_daily_publications():
             return jsonify(resultado)
 
     except Exception as e:
-        # Es una buena práctica manejar errores
         print(f"Error al generar estadísticas: {e}")
         return jsonify({"error": "Error interno del servidor"}), 500
 
@@ -335,7 +332,7 @@ def get_type_proportion():
 
 
 @app.route("/api/statistics/monthly_adoptions", methods=["GET"])
-def get_monthly_adoptions() -> Response:
+def get_monthly_adoptions():
     """
     Devuelve los puntos de datos de los últimos 12 meses (incluyendo el actual)
     con la cantidad de adopciones de perros y gatos por separado.

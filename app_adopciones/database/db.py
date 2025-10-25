@@ -205,7 +205,7 @@ class Comentario(Base):
     def __repr__(self) -> str:
         return f"<Comentario(id={self.id}, aviso_id='{self.aviso_id}', nombre='{self.nombre}', texto='{self.texto}', fecha='{self.fecha}')>"
 
-    def to_dict(self) -> dict:
+    def to_dict(self):
         return {
             "id": self.id,
             "aviso_id": self.aviso_id,
