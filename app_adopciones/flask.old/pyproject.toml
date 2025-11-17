@@ -1,0 +1,4 @@
+[tool.basedpyright]
+include = ["app.py", "utils/validate.py", "database/db.py"]
+exclude = ["**/__pycache__"]
+venvPath = "venv"

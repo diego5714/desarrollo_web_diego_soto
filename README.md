@@ -43,7 +43,7 @@ Repositorio para las tareas del ramo CC5002 Desarrollo de Aplicaciones Web (FCFM
         ```bash
             source database/create_user.sql;
             source database/tarea2.sql;
-            source database/region_comuna.sql;
+            source database/region-comuna.sql;
             source database/tabla-comentario.sql;
             source database/grant_user_permissions.sql
         ```
