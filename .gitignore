@@ -1,12 +1,36 @@
 enunciados/
-venv/
-__pycache__/
 desarrollo_web_diego_soto.code-workspace
-app_adopciones/pyproject.toml
-app_adopciones/static/uploads/*.jpg
-app_adopciones/static/uploads/*.jpeg
-app_adopciones/static/uploads/*.png
-app_adopciones/static/uploads/*.gif
-app_adopciones/static/uploads/*.webp
-.idea/
 
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
