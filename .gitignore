@@ -1,11 +1,8 @@
 enunciados/
 desarrollo_web_diego_soto.code-workspace
+app_adopciones/target/
 
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+*.log
 
 ### STS ###
 .apt_generated
