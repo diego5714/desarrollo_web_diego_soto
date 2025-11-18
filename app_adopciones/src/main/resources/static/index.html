@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Avisos de Adopción</title>
+        <link rel="stylesheet" href="/css/styles.css" />
+    </head>
+
+    <body>
+        <h1>Avisos de Adopción</h1>
+
+        <table id="tabla-avisos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha Publicación</th>
+                    <th>Sector</th>
+                    <th>Descripción (Ctd/Tipo/Edad)</th>
+                    <th>Comuna</th>
+                    <th>Nota (Promedio)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpo-tabla"></tbody>
+        </table>
+
+        <div id="menu-nota">
+            <label for="select-nota">Nota:</label>
+            <select id="select-nota">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+
+            <input type="hidden" id="menu-aviso-id" />
+
+            <button id="btn-enviar-nota">Enviar</button>
+            <button id="btn-cancelar-nota">Cancelar</button>
+        </div>
+
+        <script src="/js/app.js" defer></script>
+    </body>
+</html>
